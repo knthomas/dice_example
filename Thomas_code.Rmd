@@ -1,0 +1,102 @@
+---
+title: "Dice example"
+author: "Katie Thomas"
+date: "9/1/2020"
+output:
+  html_document:
+    toc: TRUE
+    toc_float: TRUE
+---
+
+```{r setup, include=FALSE}
+#set rmarkdown options
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, fig.height = 5, fig.width = 8, attr.output='style="max-height: 200px;"') 
+
+#load libraries
+library(tidyverse)
+```
+
+## Task
+
+*Please write a program that simulates and outputs the result of 100 rolls of a fair 20-sided die. What is your estimate for the average of those roles (including the standard deviation of that estimated average)? What is your estimate for the expected value of a single roll of a 20-sided die (including the standard deviation of that expected value)? Briefly explain why the two estimates are or are not the same.*
+
+
+## Simulating 100 dice rolls
+
+The following code simulates 100 rolls of a fair, 20-sided die and stores the output in a vector called 'sim'. 
+
+```{r}
+
+#make vector of numbered die sides (1-20)
+dice <- c(1:20)
+
+#Monte Carlo simulation of 100 rolls of 20 sided die
+sim <- sample(dice, size = 100, replace = TRUE)
+
+#mean of simulated rolls
+sim_mean <- mean(sim)
+
+#standard deviation of simulated rolls
+sim_sd <- sd(sim)
+```
+
+The mean of the 100 simulated rolls is `r sim_mean` and the standard deviation is `r round(sim_sd, digits = 2)`. The frequency distribution of the simulated rolls is visualized below, as well as the mean (sold line) and +/- 1 standard deviation from the mean (dotted lines). 
+
+```{r}
+#plot frequency distribution of simulated rolls
+ggplot(as.data.frame(sim), aes(x=sim)) + 
+  geom_histogram(binwidth=1, color = "mediumpurple", fill = "mediumpurple", alpha = 0.4) +
+  theme_bw() +
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank()) +
+  xlab("dice roll") +
+  geom_vline(aes(xintercept=sim_mean),
+            color="mediumpurple", linetype="solid", size=1) +
+  geom_vline(aes(xintercept=sim_mean+sim_sd),
+            color="mediumpurple", linetype="dotted", size=1) +
+  geom_vline(aes(xintercept=sim_mean-sim_sd),
+            color="mediumpurple", linetype="dotted", size=1)
+
+```
+
+
+## Expected value for a fair die
+
+The expected value of a single die roll is the mean of the probability distributions. The code below calculates this for a fair, 20-sided die. 
+
+```{r}
+#make vector of numbered dice sides (1-20)
+dice <- c(1:20)
+
+#set probability of rolling any one side on a fair-sided die
+prob <- 1/length(dice)
+
+#calculate mean of probability distribution
+expected <- sum(dice*prob)
+
+#calculate the variance
+vnc <- sum(((dice-expected)^2)*prob)
+
+#calculate standard deviation 
+stdev <- sqrt(vnc)
+```
+
+For a fair, 20-sided die the expected value is `r expected`, and the standard deviation is `r round(stdev, digits = 2)`.
+
+## Comparison of estimates
+
+The means for a simulation of 100 die rolls (mean = `r sim_mean`, SD = `r round(sim_sd, digits = 2)`) is usually close, but slightly different, to the expected value (mean = `r expected`, SD = `r round(stdev, digits = 2)`). This is because the expected value is what we expect from extremely large (infinate) sample sizes. While 100 rolls is a decent sample size and usually yields a close approximation to the expected value, with larger and larger samples we would expect the mean to get closer to the expected value.
+
+We can see this if we increase our sampling to 10,000 die rolls. 
+
+```{r}
+#Monte Carlo simulation of 10,000 rolls of 20 sided die
+sim2 <- sample(dice, size = 10000, replace = TRUE)
+
+#mean of simulated rolls
+sim2_mean <- mean(sim2)
+
+#standard deviation of simulated rolls
+sim2_sd <- sd(sim2)
+```
+
+In this simulation, the mean is `r round(sim2_mean, digits = 2)` and the standard deviation is `r round(sim2_sd, digits = 2)`. This is generally closer to the expected value. 
