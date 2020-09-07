@@ -84,7 +84,7 @@ For a fair, 20-sided die the expected value is `r expected`, and the standard de
 
 ## Comparison of estimates
 
-The means for a simulation of 100 die rolls (mean = `r sim_mean`, SD = `r round(sim_sd, digits = 2)`) is usually close, but slightly different, to the expected value (mean = `r expected`, SD = `r round(stdev, digits = 2)`). This is because the expected value is what we expect from extremely large (infinate) sample sizes. While 100 rolls is a decent sample size and usually yields a close approximation to the expected value, with larger and larger samples we would expect the mean to get closer to the expected value.
+The means for a simulation of 100 die rolls (mean = `r sim_mean`, SD = `r round(sim_sd, digits = 2)`) is usually close, but slightly different, to the expected value (mean = `r expected`, SD = `r round(stdev, digits = 2)`). This is because the expected value is what we expect from extremely large (infinite) sample sizes. While 100 rolls is a decent sample size and usually yields a close approximation to the expected value, with larger and larger samples we would expect the mean to get closer to the expected value.
 
 We can see this if we increase our sampling to 10,000 die rolls. 
 
